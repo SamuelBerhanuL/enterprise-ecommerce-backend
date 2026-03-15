@@ -1,13 +1,10 @@
 package com.enterprise.ecommerce.entity;
 
-
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "roles")
-
 public class Role {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)

@@ -1,6 +1,6 @@
 package com.enterprise.ecommerce.controller;
 
-
+import com.enterprise.ecommerce.dto.UserDTO;
 import com.enterprise.ecommerce.entity.User;
 import com.enterprise.ecommerce.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers(){
+    public List<UserDTO> getAllUsers(){
         return userService.getAllUsers();
     }
 }

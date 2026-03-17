@@ -2,6 +2,7 @@ package com.enterprise.ecommerce.auth;
 
 import com.enterprise.ecommerce.entity.User;
 import com.enterprise.ecommerce.repository.UserRepository;
+import com.enterprise.ecommerce.security.JwtService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +12,12 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder){
+    public AuthController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, JwtService jwtService){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
@@ -39,6 +42,8 @@ public class AuthController {
             return "Invalid password";
         }
 
-        return "Login successful";
+        String token = jwtService.generateToken(user.getEmail());
+
+        return token;
     }
 }

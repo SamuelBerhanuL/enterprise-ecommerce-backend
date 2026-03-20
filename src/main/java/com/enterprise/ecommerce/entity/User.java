@@ -2,6 +2,8 @@ package com.enterprise.ecommerce.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -18,12 +20,28 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
     public User() {}
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public Set<Role> getRoles(){
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles){
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -62,7 +80,7 @@ public class User {
         this.password = password;
     }
 
-    public void setRole(Role role) {
+    public void setRoles(Role role) {
         this.role = role;
     }
 }

@@ -42,7 +42,12 @@ public class AuthController {
             return "Invalid password";
         }
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(
+                user.getEmail(),
+                user.getRoles().stream()
+                        .map(role -> role.getName())
+                        .collect(java.util.stream.Collectors.toSet())
+        );
 
         return token;
     }

@@ -6,9 +6,11 @@ import com.enterprise.ecommerce.entity.User;
 import com.enterprise.ecommerce.repository.OrderRepository;
 import com.enterprise.ecommerce.repository.ProductRepository;
 import com.enterprise.ecommerce.repository.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -27,16 +29,12 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order placeOrder(@RequestBody OrderRequest request) {
+    public Order placeOrder(@RequestBody OrderRequest request, Authentication authentication) {
 
-        System.out.println("Received userId: " + request.getUserId());
-        System.out.println("Received productId: " + request.getProductId());
+        String email = authentication.getName();
 
-        User user = userRepository.findById(request.getUserId()).orElse(null);
+        User user = userRepository.findByEmail(email);
         Product product = productRepository.findById(request.getProductId()).orElse(null);
-
-        System.out.println("User found: " + (user != null));
-        System.out.println("Product found: " + (product != null));
 
         if (user == null || product == null) {
             return null;
@@ -52,7 +50,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public java.util.List<Order> getAllOrders() {
+    public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 }
